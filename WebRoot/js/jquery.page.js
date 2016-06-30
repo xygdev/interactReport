@@ -16,10 +16,13 @@
 	/******************listener start***********************
 	              监听 data-pagetype 传递的值
 	       暂时只设置对<input> <button> <a> <i> 四种标签的绑定
-	                如需为其他更多元素增加点击弹出框效果
 	                请在listener区域绑定新的监听标签
     *********************************************************/
 	$.fn.pageListener = function(){ 
+		$('input[data-pagetype]').off('click');	
+		$('button[data-pagetype]').off('click');
+		$('a[data-pagetype]').off('click');	
+		$('i[data-pagetype]').off('click');
 		/****绑定input标签****/
 		$('input[data-pagetype]').on('click', function(e) {		
 			$(this).page($(this).data());
@@ -80,6 +83,8 @@
 				if(queryurl==undefined){
 					queryurl=$(options.pagesetting.urltd).val();
 				}
+				orderby=$('#order_para').val();
+				param=param+'&orderby='+orderby;
 				$.ajax({
 					async:true,
 					type:'post', 

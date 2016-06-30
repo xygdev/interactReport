@@ -9,7 +9,7 @@ public interface EmpVODao {
 	public void delete(Long empId) throws Exception;
 	public void lock(EmpVO e) throws Exception;
 	public void update(EmpVO e) throws Exception;
-	public List<EmpVO> findAll(int begin,int end) throws Exception;
+	public List<EmpVO> findAll(int begin,int end,String orderby) throws Exception;
 	public int countAll() throws Exception;
 	public EmpVO findById(Long empId) throws Exception;
 	public List<EmpVO> findByCondition(String condition,List<Integer> para,List<String> paraVal) throws Exception;

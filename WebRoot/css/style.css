@@ -335,6 +335,91 @@ td{
   margin:1px auto;
 }
 
+/******** 多维排序  *********/
+#orderby{
+  visibility:hidden;
+  top: 100px; 
+  left: 50%;
+  margin-left: -260px;
+  width: 520px;
+  height:300px;
+  position: fixed;
+  z-index: 101;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  border-radius: 5px;
+  background-color:white;		         
+}
+
+#orderby .close-reveal-modal {
+	font-size: 22px;
+	line-height: .5;
+	position: absolute;
+	top: 8px;
+	right: 11px;
+	color: #aaa;
+	text-shadow: 0 -1px 1px rbga(0,0,0,.6);
+	font-weight: bold;
+	cursor: pointer;
+} 
+
+#orderby>.title{
+  position:relative;
+  width:100%;
+  height:30px;
+  padding:10px;
+}
+
+#orderby>.title>.title_name{
+  font-family:Microsoft YaHei;
+  font-size:20px;
+  font-weight:700;
+}
+
+#orderby>.line{
+  position:relative;
+  width:100%;
+  height:1px;
+  background:black;
+}
+
+#orderby>.contain{
+  position:relative;
+  width:86%;
+  height:160px;
+  padding:0 7%;
+}
+
+.contain>.item{
+  position:relative;
+  width:75%;
+  margin:25px auto;
+	
+}
+
+.select{
+  width:150px;
+}
+
+#orderby>.footer{
+  position:relative;
+  width:86%;	
+  height:30px;
+  padding:0 7%;
+}
+
+#orderby>.footer>button{
+  background-color:black;
+  border:1px solid black;
+  color:white;
+  width:100px;
+  height:30px;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  border-radius: 5px;
+  margin:0 10px;
+  font-weight:bold;	
+}
 /********更新框********/
 
 label>span{

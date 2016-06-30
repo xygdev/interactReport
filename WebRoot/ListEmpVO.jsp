@@ -21,28 +21,28 @@
     <div class="table">
       <table id="tb">
         <tr>
-          <th class="id">id</th>
-     	  <th class="eno">工号</th>
-     	  <th class="name">姓名</th>
-     	  <th class="sex">性别</th>
-     	  <th class="pno">电话</th>
-     	  <th class="sal">薪酬</th>
-     	  <th class="hdate">雇用日期</th>
-     	  <th class="job">职位</th>
-     	  <th class="dept">部门</th>
-     	  <th class="action">操作</th> 
-     	  <th style="display:none">&nbsp;</th>
+          <th class="emp_id" data-column="db" >id</th>
+     	  <th class="emp_number" data-column="db">工号</th>
+     	  <th class="full_name" data-column="db" >姓名</th>
+     	  <th class="sex_desc" data-column="db" >性别</th>
+     	  <th class="phone_number" data-column="db" >电话</th>
+     	  <th class="salary" data-column="db" >薪酬</th>
+     	  <th class="hire_date" data-column="db" >雇用日期</th>
+     	  <th class="job_name" data-column="db" >职位</th>
+     	  <th class="dept_name" data-column="db" >部门</th>
+     	  <th class="action" data-column="normal" >操作</th> 
+     	  <th style="display:none" data-column="normal" >&nbsp;</th>
      	</tr>
      	<tr>
-     	  <td class="id"></td>
-     	  <td class="eno"></td>
-		  <td class="name"></td>
-     	  <td class="sex"></td>
-     	  <td class="pno"></td>
-     	  <td class="sal"></td>
-     	  <td class="hdate"></td>
-     	  <td class="job"></td>
-     	  <td class="dept"></td>
+     	  <td class="emp_id"></td>
+     	  <td class="emp_number"></td>
+		  <td class="full_name"></td>
+     	  <td class="sex_desc"></td>
+     	  <td class="phone_number"></td>
+     	  <td class="salary"></td>
+     	  <td class="hire_date"></td>
+     	  <td class="job_name"></td>
+     	  <td class="dept_name"></td>
      	  <td class="action"></td>
      	  <td style="display:none">&nbsp;</td>
      	</tr>
@@ -55,19 +55,19 @@
      <input type = "hidden" id="page_size" value="10">
      <input type = "hidden" id="page_no" value="1">
      <div class="arrow_S margin">
-       <i id="last" class="fa fa-step-forward fa-2x pointer" data-pagetype="lastpage" data-queryurl="Paging/page.do" data-jsontype="table" data-pagesetting='{"loading":".ajax_loading","firstpage":"#first","lastpage":"#last","prevpage":"#previous","nextpage":"#next","setpagesize":".set_page_size","pagesize":"#page_size","pageno":"#page_no","pagerow":"#pageRow","tablename":"#tb"}'></i>
+       <i id="last" class="fa fa-step-forward fa-2x pointer" data-pagetype="lastpage" data-orderby="emp_id" data-queryurl="Paging/page.do" data-jsontype="table" data-pagesetting='{"loading":".ajax_loading","firstpage":"#first","lastpage":"#last","prevpage":"#previous","nextpage":"#next","setpagesize":".set_page_size","pagesize":"#page_size","pageno":"#page_no","pagerow":"#pageRow","tablename":"#tb"}'></i>
      </div>
      <div class="arrow_L">
-       <i id="next" class="fa fa-chevron-circle-right fa-2x pointer" data-pagetype="nextpage" data-queryurl="Paging/page.do" data-jsontype="table" data-pagesetting='{"loading":".ajax_loading","firstpage":"#first","lastpage":"#last","prevpage":"#previous","nextpage":"#next","setpagesize":".set_page_size","pagesize":"#page_size","pageno":"#page_no","pagerow":"#pageRow","tablename":"#tb"}'></i>
+       <i id="next" class="fa fa-chevron-circle-right fa-2x pointer" data-pagetype="nextpage" data-orderby="emp_id" data-queryurl="Paging/page.do" data-jsontype="table" data-pagesetting='{"loading":".ajax_loading","firstpage":"#first","lastpage":"#last","prevpage":"#previous","nextpage":"#next","setpagesize":".set_page_size","pagesize":"#page_size","pageno":"#page_no","pagerow":"#pageRow","tablename":"#tb"}'></i>
      </div>
      <div class="pageRow">
      	<span id="pageRow">1</span>
      </div>
      <div class="arrow_L">
-       <i id="previous" class="fa fa-chevron-circle-left fa-2x pointer" data-pagetype="prevpage" data-queryurl="Paging/page.do" data-jsontype="table" data-pagesetting='{"loading":".ajax_loading","firstpage":"#first","lastpage":"#last","prevpage":"#previous","nextpage":"#next","setpagesize":".set_page_size","pagesize":"#page_size","pageno":"#page_no","pagerow":"#pageRow","tablename":"#tb"}'></i>
+       <i id="previous" class="fa fa-chevron-circle-left fa-2x pointer" data-pagetype="prevpage" data-orderby="emp_id" data-queryurl="Paging/page.do" data-jsontype="table" data-pagesetting='{"loading":".ajax_loading","firstpage":"#first","lastpage":"#last","prevpage":"#previous","nextpage":"#next","setpagesize":".set_page_size","pagesize":"#page_size","pageno":"#page_no","pagerow":"#pageRow","tablename":"#tb"}'></i>
      </div>
      <div class="arrow_S">
-       <i id="first" class="fa fa-step-backward fa-2x pointer" data-pagetype="firstpage" data-queryurl="Paging/page.do" data-jsontype="table" data-pagesetting='{"loading":".ajax_loading","firstpage":"#first","lastpage":"#last","prevpage":"#previous","nextpage":"#next","setpagesize":".set_page_size","pagesize":"#page_size","pageno":"#page_no","pagerow":"#pageRow","tablename":"#tb"}'></i>
+       <i id="first" class="fa fa-step-backward fa-2x pointer" data-pagetype="firstpage" data-orderby="emp_id" data-queryurl="Paging/page.do" data-jsontype="table" data-pagesetting='{"loading":".ajax_loading","firstpage":"#first","lastpage":"#last","prevpage":"#previous","nextpage":"#next","setpagesize":".set_page_size","pagesize":"#page_size","pageno":"#page_no","pagerow":"#pageRow","tablename":"#tb"}'></i>
      </div>
    </div>
    <!-- 定义列弹出框 start -->
@@ -141,7 +141,8 @@
        </div>   
        <input type="hidden" id="lov_page_size" value="10">
        <input type="hidden" id="lov_queryurl">
-       <input type="hidden" id="lov_jsontype">           
+       <input type="hidden" id="lov_jsontype"> 
+       <input type="hidden" id="order_para" value="emp_id">          
      </div>
      <div class='contentbox'>
        <table></table>
@@ -163,20 +164,26 @@
         
         
         $(function(){
-            var json="[{'column':'id'},{'column':'name'},{'column':'sex'},{'column':'action'}]";
-            var setting = eval('('+json+')'); 
-            setting=setting.reverse();
+            //var json="[{'column':'emp_id'},{'column':'full_name'},{'column':'sex_desc'},{'column':'job_name'},{'column':'dept_name'},{'column':'action'}]";
+            var json="{\"DEFAULT_FLAG\":\"Y\",\"PUBLIC_FLAG\":\"N\",\"ORDER_BY\":\"EMP_ID ASC\",\"PAGE_SIZE\":10,\"SEQ\":[{\"column\":\"action\"},{\"column\":\"job_name\"},{\"column\":\"dept_name\"},{\"column\":\"sex_desc\"},{\"column\":\"full_name\"},{\"column\":\"emp_id\"}]}"; 
+            var setting = eval('('+json+')');
+            //setting=setting.reverse();
             $('#tb th').css('display','none');
             $('#tb td').css('display','none');
             linenum=$('#tb tr').length-1;
-            setnum=setting.length;
+            //setnum=setting.length;
+            setnum=setting.SEQ.length;
             for(i=0;i<setnum;i++){
-				if(setting[i].column!=null){
-				    console.log('setting2='+setting[i].column);
-					row=$('.'+setting[i].column);
+				//if(setting[i].column!=null){
+				if(setting.SEQ[i].column!=null){
+				    //console.log('setting2='+setting[i].column);
+				    console.log('setting2='+setting.SEQ[i].column);
+					//row=$('.'+setting[i].column);
+					row=$('.'+setting.SEQ[i].column);
 					rowindex=row.index();
 					console.log(rowindex);
-					$('.'+setting[i].column).css('display','');
+					//$('.'+setting[i].column).css('display','');
+					$('.'+setting.SEQ[i].column).css('display','');
 					if(rowindex!=0){
 						$('th:eq('+rowindex+')').insertBefore($('th:eq(0)'));
 						for(j=0;j<=linenum;j++){
@@ -197,15 +204,15 @@
         	getContent:function(data,JSONtype){  
         	    if(JSONtype=='table'){
         	        for(i=0;i<(pageMaxRow-pageMinRow+1);i++){
-                    	$('.id',$('#tb tr:eq('+(i+1)+')')).html(data.jsonRoot[i].id); 
-                   	 	$('.eno',$('#tb tr:eq('+(i+1)+')')).html(data.jsonRoot[i].eno); 
-                    	$('.name',$('#tb tr:eq('+(i+1)+')')).html(data.jsonRoot[i].name); 
-                    	$('.sex',$('#tb tr:eq('+(i+1)+')')).html(data.jsonRoot[i].sex); 
-                    	$('.pno',$('#tb tr:eq('+(i+1)+')')).html(data.jsonRoot[i].pno); 
-                    	$('.sal',$('#tb tr:eq('+(i+1)+')')).html(data.jsonRoot[i].sal);  
-                    	$('.hdate',$('#tb tr:eq('+(i+1)+')')).html(data.jsonRoot[i].hdate);
-                    	$('.job',$('#tb tr:eq('+(i+1)+')')).html(data.jsonRoot[i].job); 
-                    	$('.dept',$('#tb tr:eq('+(i+1)+')')).html(data.jsonRoot[i].dept);	  
+                    	$('.emp_id',$('#tb tr:eq('+(i+1)+')')).html(data.jsonRoot[i].id); 
+                   	 	$('.emp_number',$('#tb tr:eq('+(i+1)+')')).html(data.jsonRoot[i].eno); 
+                    	$('.full_name',$('#tb tr:eq('+(i+1)+')')).html(data.jsonRoot[i].name); 
+                    	$('.sex_desc',$('#tb tr:eq('+(i+1)+')')).html(data.jsonRoot[i].sex); 
+                    	$('.phone_number',$('#tb tr:eq('+(i+1)+')')).html(data.jsonRoot[i].pno); 
+                    	$('.salary',$('#tb tr:eq('+(i+1)+')')).html(data.jsonRoot[i].sal);  
+                    	$('.hire_date',$('#tb tr:eq('+(i+1)+')')).html(data.jsonRoot[i].hdate);
+                    	$('.job_name',$('#tb tr:eq('+(i+1)+')')).html(data.jsonRoot[i].job); 
+                    	$('.dept_name',$('#tb tr:eq('+(i+1)+')')).html(data.jsonRoot[i].dept);	  
                     	$('.action',$('#tb tr:eq('+(i+1)+')')).html('<i class=\'fa fa-trash-o delete pointer\' data-crudtype=\"del\" data-delurl=\"Paging/delete.do\" data-jsontype=\"table\" data-delparam=[\"id\",\".id\"] data-crudsetting=\'{\"loading\":\".ajax_loading\",\"refresh\":\"#refresh\",\"firstpage\":\"#first\",\"lastpage\":\"#last\",\"prevpage\":\"#previous\",\"nextpage\":\"#next\",\"setpagesize\":\".set_page_size\",\"pagesize\":\"#page_size\",\"pageno\":\"#page_no\",\"pagerow\":\"#pageRow\",\"tablename\":\"#tb\"}\'></i>\&nbsp;<i class=\'fa fa-pencil fa-fw update pointer\' data-reveal-id=\'uf\' data-animation=\'fade\' data-dismissmodalclass=\'close-update-frame\' data-crudtype=\"pre-update\" data-preupdateurl=\"Paging/preupdate.do\" data-updateparam=[\"id\",\".id\"] data-crudsetting=\'{\"loading\":\".ajax_loading\"}\' ></i>');           
                 	}
                 	$().crudListener();
@@ -292,7 +299,8 @@
        	    }       	
        	}
    </script>
-   <script type="text/javascript" src="js/jquery.row_define.js"></script>	  
+   <script type="text/javascript" src="js/jquery.row_define.js"></script>
+   <script type="text/javascript" src="js/jquery.orderby.js"></script>		  
    
   </body>
 </html>

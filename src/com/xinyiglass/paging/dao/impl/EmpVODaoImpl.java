@@ -240,13 +240,14 @@ public class EmpVODaoImpl implements EmpVODao {
 	}
 
 	//查询所有员工
-	public List<EmpVO> findAll(int begin,int end) throws Exception{
+	public List<EmpVO> findAll(int begin,int end,String orderby) throws Exception{
 		List<EmpVO> empVOList = new ArrayList<EmpVO>();
 		Connection conn = DBUtil.getConnection();
 		OracleCallableStatement stmt = null;
 		ResultSet rs=null;
+		log("orderBy="+orderby);
 		try{
-			String sql = "SELECT * FROM (select ROWNUM ROW_NUM,TMP.* from (select * from XYG_JBO_CRM_EMP_V A order by emp_id) TMP)WHERE ROW_NUM >="+begin+" AND ROW_NUM <="+end;
+			String sql = "SELECT * FROM (select ROWNUM ROW_NUM,TMP.* from (select * from XYG_JBO_CRM_EMP_V A order by "+orderby+") TMP)WHERE ROW_NUM >="+begin+" AND ROW_NUM <="+end;
 			stmt = (OracleCallableStatement)conn.prepareCall(sql);
 			rs = stmt.executeQuery();
 			while(rs.next()){

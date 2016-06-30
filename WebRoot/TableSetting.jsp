@@ -3,7 +3,7 @@
        <i class="fa fa-cog fa-2x pointer" data-reveal-id="setting" data-animation="none"></i>
      </div>
      <div class="setting">
-       <i id='refresh' class="fa fa-refresh fa-2x pointer" data-pagetype='refresh' data-queryurl="Paging/page.do" data-jsontype="table" data-pagesetting='{"loading":".ajax_loading","firstpage":"#first","lastpage":"#last","prevpage":"#previous","nextpage":"#next","setpagesize":".set_page_size","pagesize":"#page_size","pageno":"#page_no","pagerow":"#pageRow","tablename":"#tb"}'></i>
+       <i id='refresh' class="fa fa-refresh fa-2x pointer" data-pagetype='refresh' data-orderby="emp_id" data-queryurl="Paging/page.do" data-jsontype="table" data-pagesetting='{"loading":".ajax_loading","firstpage":"#first","lastpage":"#last","prevpage":"#previous","nextpage":"#next","setpagesize":".set_page_size","pagesize":"#page_size","pageno":"#page_no","pagerow":"#pageRow","tablename":"#tb"}'></i>
      </div>
      <div id="setting">
        <div class="title">
@@ -43,7 +43,7 @@
                </li> 
              </ul>
            </li>
-           <li><a class="pointer">更多设置</a></li>
+           <li><a class="pointer" data-ordertable="tb" data-reveal-id="orderby" data-animation="none" >多维排序</a></li>
            <li><a class="pointer">更多设置</a></li>
          </ul>
        </div>      

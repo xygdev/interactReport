@@ -46,6 +46,7 @@ public class ActionServlet extends HttpServlet {
 		int totalPages=0;
 		boolean firstPageFlag;
 		boolean lastPageFlag;
+		String orderBy;
 		StringBuffer sb = new StringBuffer();
 		HttpSession sess = req.getSession();
 		req.setCharacterEncoding("utf-8");
@@ -64,6 +65,8 @@ public class ActionServlet extends HttpServlet {
 			pageSize=Integer.parseInt(req.getParameter("pageSize"));
 			pageNo=Integer.parseInt(req.getParameter("pageNo"));
 			goLastPage=Boolean.parseBoolean(req.getParameter("goLastPage"));
+			orderBy=req.getParameter("orderby");
+			System.out.println("orderBy="+orderBy);
 			EmpVODao dao = (EmpVODao)Factory.getInstance("EmpVODao");
 			List<EmpVO> empVOList = new ArrayList<EmpVO>();
 			firstPageFlag=PageAnalyze.getFirstPageFlag(pageNo);
@@ -72,7 +75,7 @@ public class ActionServlet extends HttpServlet {
 				pageMinRow=PageAnalyze.getPageMinRow(pageNo, pageSize);
 				pageMaxRow=PageAnalyze.getPageMaxRow(pageNo, pageSize);	
 				try {
-					empVOList = dao.findAll(pageMinRow,pageMaxRow);
+					empVOList = dao.findAll(pageMinRow,pageMaxRow,orderBy);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -133,7 +136,7 @@ public class ActionServlet extends HttpServlet {
 				System.out.println("max:"+pageMaxRow);
 				lastPageFlag=PageAnalyze.getLastPageFlag(pageNo, pageSize, totalPages, recsSize);
 				try {
-					empVOList = dao.findAll(pageMinRow,pageMaxRow);
+					empVOList = dao.findAll(pageMinRow,pageMaxRow,orderBy);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -174,6 +177,7 @@ public class ActionServlet extends HttpServlet {
 		else if(action.equals("/delete")){
 			pageSize=Integer.parseInt(req.getParameter("pageSize"));
 			pageNo=Integer.parseInt(req.getParameter("pageNo"));
+			orderBy="emp_id";
 			List<EmpVO> empVOList = new ArrayList<EmpVO>();
 			EmpVODao dao = (EmpVODao) Factory.getInstance("EmpVODao");
 			Long empId = Long.parseLong(req.getParameter("id"));
@@ -186,7 +190,7 @@ public class ActionServlet extends HttpServlet {
 			pageMinRow=PageAnalyze.getPageMinRow(pageNo, pageSize);
 			pageMaxRow=PageAnalyze.getPageMaxRow(pageNo, pageSize);	
 			try {
-				empVOList = dao.findAll(pageMinRow,pageMaxRow);
+				empVOList = dao.findAll(pageMinRow,pageMaxRow,orderBy);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
