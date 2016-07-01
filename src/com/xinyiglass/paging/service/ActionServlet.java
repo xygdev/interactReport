@@ -189,7 +189,6 @@ public class ActionServlet extends HttpServlet {
 			pageSize=Integer.parseInt(req.getParameter("pageSize"));
 			pageNo=Integer.parseInt(req.getParameter("pageNo"));
 			orderBy="emp_id";
-			List<EmpVO> empVOList = new ArrayList<EmpVO>();
 			EmpVODao dao = (EmpVODao) Factory.getInstance("EmpVODao");
 			Long empId = Long.parseLong(req.getParameter("id"));
 			try{				
