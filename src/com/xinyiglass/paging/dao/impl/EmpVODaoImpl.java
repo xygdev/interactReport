@@ -17,9 +17,9 @@ import oracle.jdbc.OracleCallableStatement;
 import com.xinyiglass.paging.dao.EmpVODao;
 import com.xinyiglass.paging.entity.EmpVO;
 import com.xinyiglass.paging.util.Constant;
-import com.xinyiglass.paging.util.DBUtil;
+import xygdev.commons.util.DBUtil;
 import com.xinyiglass.paging.util.Factory;
-import com.xinyiglass.paging.util.TypeConvert;
+import xygdev.commons.convert.TypeConvert;
 
 public class EmpVODaoImpl implements EmpVODao {
 	public void log(String log){

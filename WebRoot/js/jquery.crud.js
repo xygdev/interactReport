@@ -109,7 +109,7 @@
 				pageSize=parseInt($(options.crudsetting.pagesize).val());
 				/****删除提示信息弹出框内容尚未更改为可设置参数，待处理****/
 				tr=$(this).parent().parent();
-				name=tr.children('.name').text();
+				name=tr.children('.full_name').text();
 				result=confirm('是否要删除用户('+name+')?');
 				/****删除提示信息弹出框内容尚未更改为可设置参数，待处理****/
 				if(result==true){

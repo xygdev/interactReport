@@ -2,6 +2,7 @@ package com.xinyiglass.paging.service;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.Connection;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,13 +15,19 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.xinyiglass.paging.dao.EmpVODao;
-import com.xinyiglass.paging.dao.CommonDao;
+import com.xinyiglass.paging.dao.InteractDao;
 import com.xinyiglass.paging.entity.EmpVO;
-import com.xinyiglass.paging.entity.SqlResultSet;
+
+import xygdev.commons.entity.SqlResultSet;
+import xygdev.commons.util.DBUtil;
+
 import com.xinyiglass.paging.util.Constant;
 import com.xinyiglass.paging.util.Factory;
-import com.xinyiglass.paging.util.TypeConvert;
-import com.xinyiglass.paging.util.WebUIConvert;
+
+import xygdev.commons.convert.TypeConvert;
+import xygdev.commons.convert.WebUIConvert;
+import xygdev.commons.dao.OracleDao;
+
 import com.xinyiglass.paging.util.PageAnalyze;
 
 //整合所有的Servlet处理
@@ -57,6 +64,10 @@ public class ActionServlet extends HttpServlet {
 		//截取从"/"开始到"."结束，不包括"."的字符串
 		String action = uri.substring(uri.lastIndexOf("/"),uri.lastIndexOf("."));
 		log("action:"+action);
+		//暂时没有想好在哪里。以后肯定是不可以加在这里的！仅仅测试用！2016.6.30
+		DBUtil.url = "jdbc:oracle:thin:@//192.168.0.26:1521/PDB_APEX";
+		DBUtil.user = "APEX_UAT";
+		DBUtil.password = "apex_uat";
 		if (action.equals("/list")){
 			RequestDispatcher rd=req.getRequestDispatcher("ListEmpVO.jsp");
 			rd.forward(req, res);
@@ -187,6 +198,8 @@ public class ActionServlet extends HttpServlet {
 				e.printStackTrace();
 				log("删除失败!请稍后重试!");
 			}
+			 sb.append("{\"jsonRoot\":\"success\"}"); 
+			/*
 			pageMinRow=PageAnalyze.getPageMinRow(pageNo, pageSize);
 			pageMaxRow=PageAnalyze.getPageMaxRow(pageNo, pageSize);	
 			try {
@@ -235,11 +248,14 @@ public class ActionServlet extends HttpServlet {
 		    sb.append("\",\"lastPageFlag\":\""+lastPageFlag);
 		    sb.append("\",\"totalPages\":\""+totalPages);
 		    sb.append("\"}");
+		    */
 	        log(sb.toString());
 	        res.getWriter().print(sb); 
 		}
 		else if(action.equals("/preupdate")){
+			//log("getParameter id:"+req.getParameter("id"));
 			Long empId = Long.parseLong(req.getParameter("id"));
+			//log("empId:"+empId);
 			EmpVO empVO = new EmpVO();
 			EmpVODao dao = (EmpVODao) Factory.getInstance("EmpVODao");
 			try {
@@ -339,50 +355,6 @@ public class ActionServlet extends HttpServlet {
 				//out.println("更新失败!请稍后重试!");
 			}
 			res.getWriter().print(updateFlag);
-			/*
-			try{
-				//因为ebk是全局的成员变量，如果同时有别人也在用更新员工的功能，这个变量会被刷新！
-				//所以，加锁不可以用这个逻辑，应该是用类似Oracle的会话层的逻辑。等以后再解决这个问题！
-				if (!empId.equals(ebk.getEmpId())){
-					out.println("更新的数据无法匹配!请重新查询!");
-					log("empId:"+empId+",ebk.getEmpId:"+ebk.getEmpId());
-					return;
-				}
-				//更新处理
-				EmpVODao dao = (EmpVODao)Factory.getInstance("EmpVODao");
-				try{
-					dao.lock(ebk);//加锁，验证数据是否变更了。
-				}catch(Exception ex){
-					ex.printStackTrace();
-					out.println("记录已经被另外一个用户更新!请刷新界面再处理!");
-					return;
-				}
-				EmpVO e = new EmpVO(ebk);//dao.findById(empId);复制对象！
-				//EmpVO e = LoadEmpVO.ebk; 这里不可以直接等于，否则传引用了。
-				e.setEmpNumber(req.getParameter("emp_number"));
-				e.setFirstName(req.getParameter("first_name"));
-				e.setLastName(req.getParameter("last_name"));
-				e.setFullName(e.getLastName()+","+e.getFirstName());
-				e.setSex(req.getParameter("sex"));
-				e.setEmail(req.getParameter("email"));
-				e.setPhoneNumber(req.getParameter("phone_number"));
-				e.setHireDate(TypeConvert.str2Date(req.getParameter("hire_date")));
-				e.setJobId(TypeConvert.str2Long(req.getParameter("job_id")));
-				e.setSalary(TypeConvert.str2Double(req.getParameter("salary")));
-				e.setManagerId(TypeConvert.str2Long(req.getParameter("manager_id")));
-				e.setDepartmentId(TypeConvert.str2Long(req.getParameter("department_id")));
-				e.setUserId(TypeConvert.str2Long(req.getParameter("user_id")));
-				e.setEnableDate(TypeConvert.str2Timestamp(req.getParameter("enable_date")));
-				//e.setDisabledDate(null);
-				e.setRemark(req.getParameter("remark"));
-				dao.update(e);
-				//ebk = null;//更新之后，必须要释放资源
-				res.sendRedirect("list.do");
-			}catch(Exception e){
-				e.printStackTrace();
-				out.println("更新失败!请稍后重试!");
-			}
-			*/
 		}		
 		else if(action.equals("/job")){
 			String job_id=null;
@@ -398,7 +370,7 @@ public class ActionServlet extends HttpServlet {
 			firstPageFlag=PageAnalyze.getFirstPageFlag(pageNo);
 			pageMinRow=PageAnalyze.getPageMinRow(pageNo, pageSize);
 			pageMaxRow=PageAnalyze.getPageMaxRow(pageNo, pageSize);	
-			CommonDao dao=(CommonDao)Factory.getInstance("CommonDao");
+			OracleDao dao=(OracleDao)Factory.getInstance("OracleDao");
 			if(job_id!=null){
 				sqlStmt="select job_id,job_name from XYG_JBO_CRM_JOB where 1=1";
 				param[0]="1";
@@ -488,7 +460,7 @@ public class ActionServlet extends HttpServlet {
 			firstPageFlag=PageAnalyze.getFirstPageFlag(pageNo);
 			pageMinRow=PageAnalyze.getPageMinRow(pageNo, pageSize);
 			pageMaxRow=PageAnalyze.getPageMaxRow(pageNo, pageSize);	
-			CommonDao dao=(CommonDao)Factory.getInstance("CommonDao");
+			OracleDao dao=(OracleDao)Factory.getInstance("OracleDao");
 			if(dept_name!=null){
 				sqlStmt="SELECT DEPT_ID,DEPT_NAME,DEPT_TYPE_DESC,MANAGER_NAME,LOCATION_NAME,ENABLE_DATE,REMARK FROM XYG_JBO_CRM_DEPT_V";
 				param[0]="1";
@@ -617,6 +589,43 @@ public class ActionServlet extends HttpServlet {
 				out.println("<a href='insert.jsp'>重试</a>");
 			}	
 			}
+		}
+		else if(action.equals("/getDefaultIRR")){
+			//根据用户和报表的名称获取默认打开的文件夹
+			String sqlStmt;
+			sqlStmt="SELECT HEADER_ID "
+					+ " FROM XYG_ALD_INTERACT_HEADERS "
+					+ "  WHERE 1=1 "
+					+ " AND DEFAULT_FLAG = 'Y' "
+					+ " AND INTERACT_CODE =:1  "
+					+ " AND USER_ID = :2 "
+					+ " AND ROWNUM<=1"
+					+ " AND 1=0 ";
+			String[] param = new String[2];
+			Object[] paramVal = new Object[2];
+			param[0] = "1";
+			param[1] = "2";
+			paramVal[0] = "REPORT_TEST";
+			paramVal[1] = "1";
+			String retStr=new String();
+			try{
+				OracleDao dao=(OracleDao)Factory.getInstance("OracleDao");
+				retStr=dao.retStrBySql(sqlStmt,param,paramVal);
+			}catch(Exception e){
+				e.printStackTrace();
+			}
+			//由于Long不接受空字符值和null的处理，所以只好用0来代替！
+			retStr = (retStr.length()==0?"0":retStr);
+			log("retStr:"+retStr);
+			String resPrint = new String();
+			try{
+				InteractDao dao = (InteractDao)Factory.getInstance("InteractDao");
+				resPrint = dao.retJsonById(Long.parseLong(retStr));
+			}catch(Exception e){
+				e.printStackTrace();
+			}
+			log("resPrint:"+resPrint);
+	        res.getWriter().print(resPrint);  
 		}
 		/*else if(action.equals("/load")){
 		    //获取员工
