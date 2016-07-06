@@ -17,6 +17,7 @@ import com.xinyiglass.paging.dao.EmpVODao;
 import com.xinyiglass.paging.dao.InteractDao;
 import com.xinyiglass.paging.entity.EmpVO;
 
+import xygdev.commons.entity.RetValue;
 import xygdev.commons.entity.SqlResultSet;
 import xygdev.commons.util.DBUtil;
 
@@ -61,7 +62,12 @@ public class ActionServlet extends HttpServlet {
 		PrintWriter out=res.getWriter();
 		String uri=req.getRequestURI();
 		//截取从"/"开始到"."结束，不包括"."的字符串
-		String action = uri.substring(uri.lastIndexOf("/"),uri.lastIndexOf("."));
+		String action = null;
+		if(uri.lastIndexOf(".")==-1){
+			action="/list";
+		}else{
+			action = uri.substring(uri.lastIndexOf("/"),uri.lastIndexOf("."));
+		}
 		log("action:"+action);
 		//暂时没有想好在哪里。以后肯定是不可以加在这里的！仅仅测试用！2016.6.30
 		DBUtil.url = "jdbc:oracle:thin:@//192.168.0.26:1521/PDB_APEX";
@@ -516,7 +522,6 @@ public class ActionServlet extends HttpServlet {
 				e.setHireDate(TypeConvert.str2sDate(req.getParameter("hire_date")));
 				e.setEnableDate(TypeConvert.str2Timestamp(req.getParameter("enable_date")));
 			} catch (ParseException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 			e.setJobId(TypeConvert.str2Long(req.getParameter("job_id")));
@@ -578,19 +583,35 @@ public class ActionServlet extends HttpServlet {
 	        res.getWriter().print(resPrint);  
 		}		
 		else if(action.equals("/getSaveData")){
+			Long user_id=TypeConvert.str2Long((String)req.getParameter("user_id"));
 			String interact_code=(String)req.getParameter("interact_code");
-			String user_id=(String)req.getParameter("user_id");
 			String user_interact_name=(String)req.getParameter("user_interact_name");
-			String order_by=(String)req.getParameter("order_by");
-			String page_size=(String)req.getParameter("page_size");
 			String description=(String)req.getParameter("description");
 			String public_flag=(String)req.getParameter("public_flag");
-			String default_flag=(String)req.getParameter("default_flag");
 			String autoquery_flag=(String)req.getParameter("autoquery_flag");
+			String default_flag=(String)req.getParameter("default_flag");
+			String order_by=(String)req.getParameter("order_by");
+			int page_size=Integer.parseInt((String)req.getParameter("page_size")) ;
 			String seq=(String)req.getParameter("seq");
-			log("interact_code="+interact_code+"&user_id="+user_id+"&user_interact_name="+user_interact_name+"&order_by="+order_by+"&page_size="+page_size+"&description="+description+"&seq="+seq+"&public_flag="+public_flag+"&default_flag="+default_flag+"&autoquery_flag="+autoquery_flag);
-			sb.append("{\"jsonRoot\":\"success\"}");
-	        log(sb.toString());
+			//存入数据库
+			log("save to oracle db");
+			RetValue retPLSQL=new RetValue(0,"");
+			try{
+				InteractDao dao = (InteractDao)Factory.getInstance("InteractDao");
+				retPLSQL = dao.saveInteract(user_id, interact_code, user_interact_name
+										, description, public_flag, autoquery_flag, default_flag, order_by, page_size, seq);
+			}catch(Exception e){
+				retPLSQL.setRetcode(2);
+				retPLSQL.setErrbuf(e.getMessage());
+				e.printStackTrace();
+			}
+			log(retPLSQL.getRetcode()+",BUF:"+retPLSQL.getErrbuf()+",PARAM1:"+retPLSQL.getParam1());
+			//前端判断：0：处理成功。非0：处理失败。
+			sb.append("{\"jsonRoot\":{");
+			sb.append("\""+xygdev.commons.util.Constant.RETCODE+"\":\""+retPLSQL.getRetcode()+"\"");
+			sb.append(",\""+xygdev.commons.util.Constant.ERRBUF+"\":\""+retPLSQL.getErrbuf()+"\"");
+			sb.append("}}");
+	        log(sb.toString()); 
 	        res.getWriter().print(sb); 
 		}
 	}

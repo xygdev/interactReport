@@ -1,7 +1,12 @@
 package com.xinyiglass.paging.dao.impl;
 
+import java.sql.Connection;
+
 import xygdev.commons.dao.OracleDao;
+import xygdev.commons.entity.RetValue;
 import xygdev.commons.entity.SqlResultSet;
+import xygdev.commons.util.Constant;
+import xygdev.commons.util.DBUtil;
 
 import com.xinyiglass.paging.dao.InteractDao;
 import com.xinyiglass.paging.util.Factory;
@@ -82,5 +87,82 @@ public class InteractDaoImpl implements InteractDao {
 	    }
 	    sb.append("}");
 	    return sb.toString();
+	}
+	
+	public RetValue saveInteract(
+			 Long user_id
+			,String interact_code
+			,String user_interact_name
+			,String description
+			,String public_flag
+			,String autoquery_flag
+			,String default_flag
+			,String order_by
+			,int page_size
+			,String seq
+			) throws Exception{
+		String sqlStmt=null;
+		sqlStmt ="begin "
+				+ "XYG_ALD_INTERACT_PKG.HANDLE_INTERACT( "
+				+ ":1 "//P_USER_ID              NUMBER
+				+ ",:2 "//P_INTERACT_CODE        VARCHAR2
+				+ ",:3 "//P_USER_INTERACT_NAME   VARCHAR2
+				+ ",:4 "//P_DESCRIPTION          VARCHAR2
+				+ ",:5 "//P_PUBLIC_FLAG          VARCHAR2
+				+ ",:6 "//P_AUTOQUERY_FLAG       VARCHAR2
+				+ ",:7 "//P_DEFAULT_FLAG         VARCHAR2
+				+ ",:8 "//P_ORDER_BY             VARCHAR2
+				+ ",:9 "//P_Page_Size            NUMBER
+				+ ",:10 "//P_LANGUAGE             VARCHAR2
+				+ ",:11 "//P_INTERACT_LINES       VARCHAR2
+				+ ",:"+Constant.PARAM1  //X_HEADER_ID            OUT NUMBER
+				+ ",:"+Constant.RETCODE  //x_retcode              OUT NUMBER
+				+ ",:"+Constant.ERRBUF  //x_errbuf               OUT VARCHAR2
+				+ "); "
+				+ "end ;";
+		RetValue retPLSQL=new RetValue(0,"成功Save");
+		String[] param=new String[11];
+		param[0]="1";
+		param[1]="2";
+		param[2]="3";
+		param[3]="4";
+		param[4]="5";
+		param[5]="6";
+		param[6]="7";
+		param[7]="8";
+		param[8]="9";
+		param[9]="10";
+		param[10]="11";
+		Object[] paramVal=new Object[11];
+		paramVal[0]=user_id;
+		paramVal[1]=interact_code;
+		paramVal[2]=user_interact_name;
+		paramVal[3]=description;
+		paramVal[4]=public_flag;
+		paramVal[5]=autoquery_flag;
+		paramVal[6]=default_flag;
+		paramVal[7]=order_by;
+		paramVal[8]=page_size;
+		paramVal[9]="ZHS";
+		paramVal[10]=seq;
+		Connection conn=null;
+		try{
+			conn = DBUtil.getConnection();
+			OracleDao dao=(OracleDao)Factory.getInstance("OracleDao");
+			retPLSQL = dao.executePLSQL(conn,sqlStmt, param, paramVal);
+			if(!(retPLSQL.getRetcode()==0)){
+				conn.rollback();
+			}else{
+				conn.commit();
+			}
+		}catch(Exception e){
+			conn.rollback();//有异常先回滚
+			retPLSQL.setRetcode(2);
+			retPLSQL.setErrbuf(e.getMessage());
+			e.printStackTrace();
+		}finally{
+			DBUtil.close(conn);
+		}
+		return retPLSQL;
 	}
 }
