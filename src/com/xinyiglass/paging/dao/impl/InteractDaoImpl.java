@@ -41,7 +41,7 @@ public class InteractDaoImpl implements InteractDao {
 		}
 	    sb.append("{"); 
 	    if(resultSetH.getResultSet().size()>0){//存在数据
-		    sb.append("\"EXISTS\": \"Y\",\"jsonRoot\":["); 
+		    sb.append("\"EXISTS\": \"Y\",\"jsonRoot\":"); 
 		    for(int i=0;i<resultSetH.getResultSet().size();i++){
 		    	for(int n=0;n<resultSetH.getResultSet().get(i).length;n++){
 		    		if(n==0){
@@ -78,9 +78,9 @@ public class InteractDaoImpl implements InteractDao {
 		    sb.deleteCharAt(sb.lastIndexOf(","));
 		    sb.append("]}");
 	    }else{//不存在数据
-		    sb.append("\"EXISTS\": \"N\",\"jsonRoot\":["); 
+		    sb.append("\"EXISTS\": \"N\",\"jsonRoot\":{}"); 
 	    }
-	    sb.append("]}");
+	    sb.append("}");
 	    return sb.toString();
 	}
 }

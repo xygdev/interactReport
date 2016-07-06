@@ -16,15 +16,15 @@
     	$('#setting').css('visibility','hidden');
      	$('#show').empty();//清空show <option>中的内容
      	$('#hide').empty();//清空hide <option>中的内容
-		count=$('th').length-1;//获取总列数（排除最后一列的空列）
+		count=$('#tb th').length-1;//获取总列数（排除最后一列的空列）
      	for(i=0;i<count;i++){//遍历标题列（除最后一列空列外）
-     	    if($('th:eq('+i+')').css('display')!='none'){
+     	    if($('#tb th:eq('+i+')').css('display')!='none'){
 				//如果标题列不隐藏，则标题名加入show <option>中
-     	        $('#show').append('<option value='+$('th:eq('+i+')').attr('class')+'>'+$('th:eq('+i+')').text()+'</option>')
+     	        $('#show').append('<option value='+$('#tb th:eq('+i+')').attr('class')+'>'+$('#tb th:eq('+i+')').text()+'</option>')
      	    }
      	    else{
 				//如果标题列隐藏，则标题名加入hide <option>中
-     	        $('#hide').append('<option value='+$('th:eq('+i+')').attr('class')+'>'+$('th:eq('+i+')').text()+'</option>')
+     	        $('#hide').append('<option value='+$('#tb th:eq('+i+')').attr('class')+'>'+$('#tb th:eq('+i+')').text()+'</option>')
      	    }
      	}      
     });  

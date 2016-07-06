@@ -2,7 +2,6 @@ package com.xinyiglass.paging.service;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.sql.Connection;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
@@ -197,57 +196,7 @@ public class ActionServlet extends HttpServlet {
 				e.printStackTrace();
 				log("删除失败!请稍后重试!");
 			}
-			 sb.append("{\"jsonRoot\":\"success\"}"); 
-			/*
-			pageMinRow=PageAnalyze.getPageMinRow(pageNo, pageSize);
-			pageMaxRow=PageAnalyze.getPageMaxRow(pageNo, pageSize);	
-			try {
-				empVOList = dao.findAll(pageMinRow,pageMaxRow,orderBy);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			firstPageFlag=PageAnalyze.getFirstPageFlag(pageNo);
-			recsSize=empVOList.size();	
-		    lastPageFlag=PageAnalyze.getLastPageFlag(pageNo, pageSize, totalPages, recsSize);
-		    if(recsSize>0){
-			    pageMaxRow=pageMinRow+recsSize-1;
-		    }else{
-		    	pageMinRow=0;
-		    	pageMaxRow=0;
-		    }
-		    sb.append("{\"jsonRoot\":["); 
-		    for (int i=0;i<empVOList.size();i++) {
-		    	EmpVO e = empVOList.get(i);
-		    	sb.append("{\"id\":\"" + e.getEmpId()); 
-		    	sb.append("\",");  
-		    	sb.append("\"eno\":\"" + WebUIConvert.type2Str(e.getEmpNumber())); 
-		    	sb.append("\",");  
-		    	sb.append("\"name\":\"" + e.getFullName()); 
-		    	sb.append("\",");  
-		    	sb.append("\"sex\":\"" + e.getSexDesc()); 
-		    	sb.append("\",");  
-		    	sb.append("\"pno\":\"" + WebUIConvert.type2Str(e.getPhoneNumber())); 
-		    	sb.append("\",");  
-		    	sb.append("\"sal\":\"" + WebUIConvert.type2Str(e.getSalary())); 
-		    	sb.append("\",");  
-		    	sb.append("\"hdate\":\"" + WebUIConvert.type2Str(e.getHireDate())); 
-		    	sb.append("\",");  
-		    	sb.append("\"job\":\"" + WebUIConvert.type2Str(e.getJobName())); 
-		    	sb.append("\",");  
-		    	sb.append("\"dept\":\"" + WebUIConvert.type2Str(e.getDeptName()));
-		    	sb.append("\"");  
-	            sb.append("},");
-		    }
-		    if (recsSize>0){
-			    sb.deleteCharAt(sb.lastIndexOf(","));  // 删去最后一个逗号  
-		    }
-		    sb.append("],\"pageMinRow\":\""+pageMinRow);
-		    sb.append("\",\"pageMaxRow\":\""+pageMaxRow);
-		    sb.append("\",\"firstPageFlag\":\""+firstPageFlag);
-		    sb.append("\",\"lastPageFlag\":\""+lastPageFlag);
-		    sb.append("\",\"totalPages\":\""+totalPages);
-		    sb.append("\"}");
-		    */
+			sb.append("{\"jsonRoot\":\"success\"}");
 	        log(sb.toString());
 	        res.getWriter().print(sb); 
 		}
@@ -590,6 +539,8 @@ public class ActionServlet extends HttpServlet {
 			}
 		}
 		else if(action.equals("/getDefaultIRR")){
+			String interact_code=(String)req.getParameter("interact_code");
+			String user_id=(String)req.getParameter("user_id");
 			//根据用户和报表的名称获取默认打开的文件夹
 			String sqlStmt;
 			sqlStmt="SELECT HEADER_ID "
@@ -599,13 +550,13 @@ public class ActionServlet extends HttpServlet {
 					+ " AND INTERACT_CODE =:1  "
 					+ " AND USER_ID = :2 "
 					+ " AND ROWNUM<=1"
-					+ " AND 1=0 ";
+					+ " AND 1=1 ";
 			String[] param = new String[2];
 			Object[] paramVal = new Object[2];
 			param[0] = "1";
 			param[1] = "2";
-			paramVal[0] = "REPORT_TEST";
-			paramVal[1] = "1";
+			paramVal[0] = interact_code;		
+			paramVal[1] = user_id;			
 			String retStr=new String();
 			try{
 				OracleDao dao=(OracleDao)Factory.getInstance("OracleDao");
@@ -625,21 +576,22 @@ public class ActionServlet extends HttpServlet {
 			}
 			log("resPrint:"+resPrint);
 	        res.getWriter().print(resPrint);  
+		}		
+		else if(action.equals("/getSaveData")){
+			String interact_code=(String)req.getParameter("interact_code");
+			String user_id=(String)req.getParameter("user_id");
+			String user_interact_name=(String)req.getParameter("user_interact_name");
+			String order_by=(String)req.getParameter("order_by");
+			String page_size=(String)req.getParameter("page_size");
+			String description=(String)req.getParameter("description");
+			String public_flag=(String)req.getParameter("public_flag");
+			String default_flag=(String)req.getParameter("default_flag");
+			String autoquery_flag=(String)req.getParameter("autoquery_flag");
+			String seq=(String)req.getParameter("seq");
+			log("interact_code="+interact_code+"&user_id="+user_id+"&user_interact_name="+user_interact_name+"&order_by="+order_by+"&page_size="+page_size+"&description="+description+"&seq="+seq+"&public_flag="+public_flag+"&default_flag="+default_flag+"&autoquery_flag="+autoquery_flag);
+			sb.append("{\"jsonRoot\":\"success\"}");
+	        log(sb.toString());
+	        res.getWriter().print(sb); 
 		}
-		/*else if(action.equals("/load")){
-		    //获取员工
-		    Long empId = Long.parseLong(req.getParameter("id"));
-		    try{
-			    EmpVODao dao = (EmpVODao) Factory.getInstance("EmpVODao");
-			    EmpVO e = dao.findById(empId);
-		    	ebk = e;
-		    	req.setAttribute("empVO", e);
-		    	req.getRequestDispatcher("UpdateEmpVO.jsp").forward(req, res);
-		    }catch(Exception e){
-		    	e.printStackTrace();
-		    	out.println("读取失败!请稍后重试!");
-		    }
-	    }*/
-		
 	}
 }

@@ -13,6 +13,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;   
 import java.util.concurrent.Semaphore;   
  
+@SuppressWarnings({ "resource", "unchecked","rawtypes","unused" })
 public class Pressure {
 	private static int thread_num = 50;   
 	private static int client_num = 500;   

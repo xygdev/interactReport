@@ -17,8 +17,11 @@ import oracle.jdbc.OracleCallableStatement;
 import com.xinyiglass.paging.dao.EmpVODao;
 import com.xinyiglass.paging.entity.EmpVO;
 import com.xinyiglass.paging.util.Constant;
+
 import xygdev.commons.util.DBUtil;
+
 import com.xinyiglass.paging.util.Factory;
+
 import xygdev.commons.convert.TypeConvert;
 
 public class EmpVODaoImpl implements EmpVODao {
@@ -384,12 +387,14 @@ public class EmpVODaoImpl implements EmpVODao {
 	}
 	
 	//输入参数为Sql语句，输出行数，输出栏位数
+	@SuppressWarnings("resource")
 	public StringBuffer findBySQL(String sql,int pagesize,int output,int pagemax,int pagemin) throws Exception{
 		StringBuffer sb = new StringBuffer();
 		Object[][] result=new Object[pagesize][output];
 		Connection conn = DBUtil.getConnection();
 		OracleCallableStatement stmt = null;
 		ResultSet rs = null;	
+		@SuppressWarnings("null")
 		ResultSetMetaData rsmt = rs.getMetaData();
 		String[] colName=new String[rsmt.getColumnCount()];
 		for(int i=1;i<=rsmt.getColumnCount();i++){
@@ -498,6 +503,7 @@ public class EmpVODaoImpl implements EmpVODao {
 	}
 	
 	
+	@SuppressWarnings("unused")
 	public static void main (String[] args) throws Exception{
 		//01 Test insert emp in java:
 		try{
