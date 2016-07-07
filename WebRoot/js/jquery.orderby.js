@@ -145,7 +145,7 @@
         		user_interact_name=$('#define_name').val();
         		order_by=$('#order_para').val();
         		page_size=$('#page_size').val();
-        		if(user_interact_name==null){
+        		if(user_interact_name==''){
         			alert('自定义名称不能为空');
         			return;
         		}

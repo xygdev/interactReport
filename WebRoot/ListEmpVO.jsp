@@ -375,36 +375,6 @@
 				}
 			}); 
         });
-        
-        /********************Testing*****************************/
-        /*
-        $('a[data-save]').on('click', function(e) {	
-			e.preventDefault();//阻止<a>标签默认的点击事件（超链接跳转）
-			arr = new Array();
-			count=$('#tb th').length-1;//获取总列数（排除最后一列的空列）
-     	    for(i=0;i<count;i++){//遍历标题列（除最后一列空列外）
-     	        if($('#tb th:eq('+i+')').css('display')!='none'){
-				    //如果标题列不隐藏，则标题名加入show <option>中
-				    arr[i]=$('#tb th:eq('+i+')').attr('class');
-     	            //$('#show').append('<option value='+$('#tb th:eq('+i+')').attr('class')+'>'+$('#tb th:eq('+i+')').text()+'</option>')
-     	        }
-     	    }
-     	    arr.reverse();
-     	    console.log(arr);
-     	    param='arr='+arr;
-     	    $.ajax({
-				type:'post', 
-				data:param,
-				url:'getSaveData.do',
-				dataType:'json',
-				success: function (data) {
-				
-				},error: function(){
-				    alert("未知错误");
-				}
-			});
-		});*/
-        /*******************************************************/
    
         jQuery.json={
         	getContent:function(data,JSONtype){  
