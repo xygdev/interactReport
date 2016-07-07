@@ -12,6 +12,11 @@ import com.xinyiglass.paging.dao.InteractDao;
 import com.xinyiglass.paging.util.Factory;
 
 public class InteractDaoImpl implements InteractDao {
+	public void log(String log){
+		if (Constant.DEBUG_MODE){
+			System.out.println(log);
+		}
+	}
 	public String retJsonById(Long id) throws Exception{
 		StringBuffer sb = new StringBuffer();
 		OracleDao dao=(OracleDao)Factory.getInstance("OracleDao");
@@ -88,17 +93,66 @@ public class InteractDaoImpl implements InteractDao {
 	    sb.append("}");
 	    return sb.toString();
 	}
+
+	public String retJsonByUser(Long userId,String interfactCode) throws Exception{
+		StringBuffer sb = new StringBuffer();
+		OracleDao dao=(OracleDao)Factory.getInstance("OracleDao");
+		String sqlStmt;
+		//根据用户和报表的名称获取该用户所有可以打开的文件夹
+		sqlStmt="SELECT HEADER_ID,USER_INTERACT_NAME "
+				+ " FROM XYG_ALD_INTERACT_HEADERS "
+				+ "  WHERE 1=1 "
+				+ " AND INTERACT_CODE =:1  "
+				+ " AND (USER_ID = :2 OR PUBLIC_FLAG = 'Y') "
+				+ " ORDER BY DECODE(USER_ID,:3,0,1),USER_INTERACT_NAME ";
+		String[] param = new String[3];
+		Object[] paramVal = new Object[3];
+		param[0] = "1";
+		param[1] = "2";
+		param[2] = "3";
+		paramVal[0] = interfactCode;		
+		paramVal[1] = userId;
+		paramVal[2] = userId;
+		SqlResultSet resultSet=new SqlResultSet();
+		try{
+			resultSet=dao.retResultSetBySql(sqlStmt,param,paramVal);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		log("sql result:"+resultSet.getResultSet().size());
+	    if(resultSet.getResultSet().size()>0){//存在数据
+		    sb.append("{\"EXISTS\": \"Y\",\"jsonRoot\":["); 
+		    for(int i=0;i<resultSet.getResultSet().size();i++){
+		    	for(int n=0;n<resultSet.getResultSet().get(i).length;n++){
+		    		if(n==0){
+		    			sb.append("{");
+		    		}
+		    		sb.append("\""+resultSet.getColName()[n]+"\":\"" + resultSet.getResultSet().get(i)[n]); 
+			    	sb.append("\",");  	
+			    	if(n==(resultSet.getResultSet().get(i).length-1)){
+			    		sb.deleteCharAt(sb.lastIndexOf(","));
+			    		sb.append("},");
+			    	}		
+		    	}
+		    }
+		    sb.deleteCharAt(sb.lastIndexOf(","));
+		    sb.append("]}");
+	    }else{//不存在数据
+		    sb.append("{\"EXISTS\": \"N\",\"jsonRoot\":{}}"); 
+	    }
+	    return sb.toString();
+	}
 	
 	public RetValue saveInteract(
-			 Long user_id
-			,String interact_code
-			,String user_interact_name
+			 Long userId
+			,String interactCode
+			,String userInteractName
 			,String description
-			,String public_flag
-			,String autoquery_flag
-			,String default_flag
-			,String order_by
-			,int page_size
+			,String publicFlag
+			,String autoqueryFlag
+			,String defaultFlag
+			,String orderBy
+			,int pageSize
 			,String seq
 			) throws Exception{
 		String sqlStmt=null;
@@ -134,15 +188,15 @@ public class InteractDaoImpl implements InteractDao {
 		param[9]="10";
 		param[10]="11";
 		Object[] paramVal=new Object[11];
-		paramVal[0]=user_id;
-		paramVal[1]=interact_code;
-		paramVal[2]=user_interact_name;
+		paramVal[0]=userId;
+		paramVal[1]=interactCode;
+		paramVal[2]=userInteractName;
 		paramVal[3]=description;
-		paramVal[4]=public_flag;
-		paramVal[5]=autoquery_flag;
-		paramVal[6]=default_flag;
-		paramVal[7]=order_by;
-		paramVal[8]=page_size;
+		paramVal[4]=publicFlag;
+		paramVal[5]=autoqueryFlag;
+		paramVal[6]=defaultFlag;
+		paramVal[7]=orderBy;
+		paramVal[8]=pageSize;
 		paramVal[9]="ZHS";
 		paramVal[10]=seq;
 		Connection conn=null;

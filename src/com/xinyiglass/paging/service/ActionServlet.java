@@ -43,17 +43,6 @@ public class ActionServlet extends HttpServlet {
 	
 	public void service(HttpServletRequest req,HttpServletResponse res)
 	throws ServletException,IOException{
-		int pageSize=0;
-		int pageNo=0;
-		boolean goLastPage;
-		int pageMinRow=0;
-		int pageMaxRow=0;
-		int recsSize=0;
-		int totalRecs=0;
-		int totalPages=0;
-		boolean firstPageFlag;
-		boolean lastPageFlag;
-		String orderBy;
 		StringBuffer sb = new StringBuffer();
 		HttpSession sess = req.getSession();
 		req.setCharacterEncoding("utf-8");
@@ -78,6 +67,17 @@ public class ActionServlet extends HttpServlet {
 			rd.forward(req, res);
 		}
 		else if(action.equals("/page")){
+			int pageSize=0;
+			int pageNo=0;
+			boolean goLastPage;
+			int pageMinRow=0;
+			int pageMaxRow=0;
+			int recsSize=0;
+			int totalRecs=0;
+			int totalPages=0;
+			boolean firstPageFlag;
+			boolean lastPageFlag;
+			String orderBy;
 			pageSize=Integer.parseInt(req.getParameter("pageSize"));
 			pageNo=Integer.parseInt(req.getParameter("pageNo"));
 			goLastPage=Boolean.parseBoolean(req.getParameter("goLastPage"));
@@ -191,9 +191,6 @@ public class ActionServlet extends HttpServlet {
 			}
 		}
 		else if(action.equals("/delete")){
-			pageSize=Integer.parseInt(req.getParameter("pageSize"));
-			pageNo=Integer.parseInt(req.getParameter("pageNo"));
-			orderBy="emp_id";
 			EmpVODao dao = (EmpVODao) Factory.getInstance("EmpVODao");
 			Long empId = Long.parseLong(req.getParameter("id"));
 			try{				
@@ -311,6 +308,15 @@ public class ActionServlet extends HttpServlet {
 			res.getWriter().print(updateFlag);
 		}		
 		else if(action.equals("/job")){
+			int pageSize=0;
+			int pageNo=0;
+			int pageMinRow=0;
+			int pageMaxRow=0;
+			int recsSize=0;
+			int totalPages=0;
+			boolean firstPageFlag;
+			boolean lastPageFlag;
+			//----
 			String job_id=null;
 			String job_name=null;	
 			String sqlStmt=null;
@@ -399,6 +405,15 @@ public class ActionServlet extends HttpServlet {
 	        res.getWriter().print(sb); 
 		}
 		else if(action.equals("/dept")){
+			int pageSize=0;
+			int pageNo=0;
+			int pageMinRow=0;
+			int pageMaxRow=0;
+			int recsSize=0;
+			int totalPages=0;
+			boolean firstPageFlag;
+			boolean lastPageFlag;
+			//---
 			String dept_name=null;
 			String dept_type_desc=null;	
 			String manager_name=null;
@@ -544,8 +559,8 @@ public class ActionServlet extends HttpServlet {
 			}
 		}
 		else if(action.equals("/getDefaultIRR")){
-			String interact_code=(String)req.getParameter("interact_code");
-			String user_id=(String)req.getParameter("user_id");
+			String interactCode=(String)req.getParameter("interact_code");
+			String userId=(String)req.getParameter("user_id");
 			//根据用户和报表的名称获取默认打开的文件夹
 			String sqlStmt;
 			sqlStmt="SELECT HEADER_ID "
@@ -560,8 +575,8 @@ public class ActionServlet extends HttpServlet {
 			Object[] paramVal = new Object[2];
 			param[0] = "1";
 			param[1] = "2";
-			paramVal[0] = interact_code;		
-			paramVal[1] = user_id;			
+			paramVal[0] = interactCode;		
+			paramVal[1] = userId;			
 			String retStr=new String();
 			try{
 				OracleDao dao=(OracleDao)Factory.getInstance("OracleDao");
@@ -583,23 +598,23 @@ public class ActionServlet extends HttpServlet {
 	        res.getWriter().print(resPrint);  
 		}		
 		else if(action.equals("/getSaveData")){
-			Long user_id=TypeConvert.str2Long((String)req.getParameter("user_id"));
-			String interact_code=(String)req.getParameter("interact_code");
-			String user_interact_name=(String)req.getParameter("user_interact_name");
+			Long userId=TypeConvert.str2Long((String)req.getParameter("user_id"));
+			String interactCode=(String)req.getParameter("interact_code");
+			String userInteractName=(String)req.getParameter("user_interact_name");
 			String description=(String)req.getParameter("description");
-			String public_flag=(String)req.getParameter("public_flag");
-			String autoquery_flag=(String)req.getParameter("autoquery_flag");
-			String default_flag=(String)req.getParameter("default_flag");
-			String order_by=(String)req.getParameter("order_by");
-			int page_size=Integer.parseInt((String)req.getParameter("page_size")) ;
+			String publicFlag=(String)req.getParameter("public_flag");
+			String autoqueryFlag=(String)req.getParameter("autoquery_flag");
+			String defaultFlag=(String)req.getParameter("default_flag");
+			String orderBy=(String)req.getParameter("order_by");
+			int pageSize=Integer.parseInt((String)req.getParameter("page_size")) ;
 			String seq=(String)req.getParameter("seq");
 			//存入数据库
-			log("save to oracle db");
+			//log("save to oracle db");
 			RetValue retPLSQL=new RetValue(0,"");
 			try{
 				InteractDao dao = (InteractDao)Factory.getInstance("InteractDao");
-				retPLSQL = dao.saveInteract(user_id, interact_code, user_interact_name
-										, description, public_flag, autoquery_flag, default_flag, order_by, page_size, seq);
+				retPLSQL = dao.saveInteract(userId, interactCode, userInteractName
+										, description, publicFlag, autoqueryFlag, defaultFlag, orderBy, pageSize, seq);
 			}catch(Exception e){
 				retPLSQL.setRetcode(2);
 				retPLSQL.setErrbuf(e.getMessage());
@@ -614,5 +629,20 @@ public class ActionServlet extends HttpServlet {
 	        log(sb.toString()); 
 	        res.getWriter().print(sb); 
 		}
+		else if(action.equals("/getUserIRR")){
+			//获取用户可用的所有IRR定义的列表
+			String interactCode=(String)req.getParameter("interact_code");
+			String userId=(String)req.getParameter("user_id");
+			//根据用户和报表的名称获取默认打开的文件夹
+			String resPrint = new String();
+			try{
+				InteractDao dao = (InteractDao)Factory.getInstance("InteractDao");
+				resPrint = dao.retJsonByUser(TypeConvert.str2Long(userId),interactCode);
+			}catch(Exception e){
+				e.printStackTrace();
+			}
+			log("resPrint:"+resPrint);
+	        res.getWriter().print(resPrint);  
+		}		
 	}
 }
