@@ -1,13 +1,15 @@
 /*********************************************************
-                    基于Jquery1.11.3版本
-                      Jquery LOV功能
+                    jQuery 页面弹出框功能
+                    Create Date:2015.1.20
+                    Create By:bird
+                    Last Update Date:2016.7.12
+                    Last Update By:bird
+                          修改日志
+           2015.1.20   创建文件
+           2016.5.10   新增Lov取值函数
+           2016.7.12   代码优化，并新增插件配置说明
 *********************************************************/
-(function($) {
-    /*******************************************************
-    						修改日志
-				2016.05.10 新增Lov取值函数
-     *******************************************************/
-	
+(function($) {	
 	/******************listener start***********************
     			监听 data-lovname 传递的值                      
 		暂时只设置对<input> <button> <a> <i> 四种标签的监听绑定               
@@ -15,27 +17,28 @@
     			请在listener区域绑定新的监听标签
 	 *******************************************************/
 	$.fn.lovListener = function(){ 
-		/****绑定input标签****/
+		/****绑定<input>标签****/
 		$('input[data-lovname]').on('click', function(e) {		
 			$(this).lov($(this).data());
 		});
-		/****绑定button标签****/
+		/****绑定<button>标签****/
 		$('button[data-lovname]').on('click', function(e) {
 			$(this).lov($(this).data());
 		});
-		/****绑定a标签****/
+		/****绑定<a>标签****/
 		$('a[data-lovname]').on('click', function(e) {
-			e.preventDefault();//阻止<a>标签默认的点击事件（超链接跳转）
+			e.preventDefault();/****阻止<a>标签默认的点击事件（超链接跳转）****/
 			$(this).lov($(this).data());
 		});
-		/****绑定i标签****/
+		/****绑定<i>标签****/
 		$('i[data-lovname]').on('click', function(e) {
 			$(this).lov($(this).data());
 		});				
 	}   
 	/******************listener end***********************/	
 	
-	$().lovListener();//执行监听函数
+	/****执行监听函数****/
+	$().lovListener();
 	
 	
     $.fn.lov = function(options) {	
@@ -100,10 +103,8 @@
         	if(options.lovsetting.defaultquery==true){//默认查询参数如果为true，则默认打开Lov时点击一次查询按钮
         		$(options.lovsetting.query).click();
         	}
-        	/****调整Lov框位置的函数,待改进，考虑设置监听替代****/
       	    width='-'+parseInt($(options.lovsetting.lovclass).css('width'))/2+'px';      	    
       	    $(options.lovsetting.lovclass).css('margin-left',width);   
-      	    /****调整Lov框位置的函数,待改进，考虑设置监听替代****/
         });    	
     }
 })(jQuery);

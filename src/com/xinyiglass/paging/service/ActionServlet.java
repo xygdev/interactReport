@@ -643,6 +643,18 @@ public class ActionServlet extends HttpServlet {
 			}
 			log("resPrint:"+resPrint);
 	        res.getWriter().print(resPrint);  
+		}
+		else if(action.equals("/getIRR")){
+			String header_id = (String)req.getParameter("header_id");
+			String resPrint = new String();
+			try{
+				InteractDao dao = (InteractDao)Factory.getInstance("InteractDao");
+				resPrint = dao.retJsonById(Long.parseLong(header_id));
+			}catch(Exception e){
+				e.printStackTrace();
+			}
+			log("resPrint:"+resPrint);
+	        res.getWriter().print(resPrint);  
 		}		
 	}
 }
