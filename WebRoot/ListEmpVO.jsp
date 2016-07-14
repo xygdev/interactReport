@@ -10,7 +10,7 @@
     <base href="<%=basePath%>">  
     <title>分页查询</title>
     <meta http-equiv="content-type" content="text/html;charset=gb2312">
-	<link rel="stylesheet" type="text/css" href="css/style.css">
+	<link rel="stylesheet" type="text/css" href="css/style.min.css">
 	<link rel="stylesheet" href="css/font-awesome.min.css">
 	<script type="text/javascript" src="js/jQuery-2.1.4.min.js"></script>
   </head> 

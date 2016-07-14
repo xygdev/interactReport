@@ -52,7 +52,7 @@
 		$('i[data-crudtype]').on('click', function(e) {
 			$(this).crud($(this).data());
 		});
-	}   
+	}  
 	/******************listener end***********************/	
     $.fn.crud = function(options) {	
     	/*********************************************
@@ -79,7 +79,7 @@
 		*********************************************/   
         var defaults={
         	crudsetting:'{"loading":"","refresh":"","firstpage":"","lastpage":"","prevpage":"","nextpage":"","setpagesize":"","pagesize":"","pageno":"","pagerow":"","delmsg":"","tablename":"","lovid":"","urltd":"","typetd":""}'
-        }              	
+        }             	
         /******继承默认属性******/
         var options = $.extend({}, defaults, options); 
         /****全局函数****/
@@ -106,7 +106,7 @@
         return this.each(function() {       	
         	/******删除方法******/
 			if(options.crudtype=='del'){
-				pageSize=parseInt($(options.crudsetting.pagesize).val());;
+				pageSize=parseInt($(options.crudsetting.pagesize).val());
 				/****删除提示信息弹出框内容尚未更改为可设置参数，待处理****/
 				tr=$(this).parent().parent();
 				name=tr.children(options.crudsetting.delmsg).text();
@@ -115,7 +115,7 @@
 				if(result==true){
 					$(options.crudsetting.loading).show();/****显示加载动画****/
 					pageNo=parseInt($(options.crudsetting.pageno).val());
-					param='pageSize='+pageSize+'&pageNo='+pageNo+'&'+options.delparam[0]+'='+tr.children(options.delparam[1]).text();//设置参数
+					param='pageSize='+pageSize+'&pageNo='+pageNo+'&'+options.delparam[0]+'='+tr.children(options.delparam[1]).text();
 					$.ajax({
 						type:'post', 
 						data:param,
@@ -131,7 +131,7 @@
 					return;			
 				}else{            
 					result=null;
-				}	    				
+				}    				
 			}
 			/******预更新方法******/
 			else if(options.crudtype=='pre-update'){
@@ -169,7 +169,7 @@
 					},
 					error: function () {
 						alert("获取数据失败");
-					}				
+					}			
 				});		
 			}
 			/******条件查询方法******/
@@ -177,7 +177,7 @@
 				jQuery.json.setQueryParam();/****设置查询条件参数函数，暂时写在页面里，考虑改进中****/				
 				pageSize=parseInt($(options.crudsetting.pagesize).val());				
 				pageNo=parseInt(1);
-				$(options.crudsetting.pageno).val(pageNo)
+				$(options.crudsetting.pageno).val(pageNo);
 				param=param+'&pageSize='+pageSize+'&pageNo='+pageNo;
 				queryurl=$(options.crudsetting.urltd).val();
 				$.ajax({
@@ -192,7 +192,7 @@
 						jQuery.json.getContent(data,$(options.crudsetting.typetd).val());
 						for(j=0;j<=(pageSize-(pageMaxRow-pageMinRow+1));j++){/****隐藏空白行****/
 	                	    $(options.crudsetting.tablename+' tr:eq('+(pageSize-j+1)+')').css('display','none');
-	                	}
+	                	};
 						jQuery.global.pageFlag(firstPageFlag,lastPageFlag);
 						width='-'+parseInt($(options.crudsetting.lovid).css('width'))/2+'px';      	    
 		      	        $(options.crudsetting.lovid).css('margin-left',width);
