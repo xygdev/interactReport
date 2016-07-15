@@ -135,7 +135,7 @@
 			}
 			/******预更新方法******/
 			else if(options.crudtype=='pre-update'){
-				$(options.crudsetting.loading).show();/****显示加载动画****/
+				$(options.crudsetting.loading).show();/****显示加载动画****/				
 				tr=$(this).parent().parent();
 				param=options.updateparam[0]+'='+tr.children(options.updateparam[1]).text();/****设置参数****/
 				$.ajax({

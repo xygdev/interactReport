@@ -10,9 +10,11 @@
     <base href="<%=basePath%>">  
     <title>分页查询</title>
     <meta http-equiv="content-type" content="text/html;charset=gb2312">
-	<link rel="stylesheet" type="text/css" href="css/style.min.css">
 	<link rel="stylesheet" href="css/font-awesome.min.css">
+	<link rel="stylesheet" href="css/jquery-ui.min.css">
+	<link rel="stylesheet" type="text/css" href="css/style.css">
 	<script type="text/javascript" src="js/jQuery-2.1.4.min.js"></script>
+	<script src="js/jquery-ui.min.js"></script>
   </head> 
   <body>
     <div id="container">
@@ -210,26 +212,40 @@
        </div>
        <a class="close-reveal-modal">&#215;</a>
        <div class="line"></div>
-       <div class="contain">
-         <div class="item left">
-           <label class="pointer left" for="define_name">自定义名称：</label>
-           <input type="text" class="left" name="define_name" id="define_name">
-           <input type="text" class="right" name="define_desc" id="define_desc">
-           <label class="pointer right" for="define_desc">描述：</label>
+       <div class="contain" id='configtabs'>
+         <ul>
+           <li><a href="#config-1">保存配置</a></li>
+           <li><a href="#config-2">加载配置</a></li>
+         </ul>
+         <div id="config-1" class='tab'>
+           <div class="item" style="text-indent:3rem">
+             <label class="pointer" for="define_name">自定义名称：</label>
+             <input type="text" name="define_name" id="define_name">
+           </div>
+           <div class="item" style="text-indent:6rem">
+             <label class="pointer" for="define_desc">描述：</label>
+             <input type="text" name="define_desc" id="define_desc">
+           </div>
+           <div class="item" style="text-indent:6rem">
+             <label class="pointer" for="public_flag">共享</label>
+             <input type="checkbox" name="public_flag" id="public_flag">
+             <label class="pointer" for="default_flag">默认</label>
+             <input type="checkbox" name="default_flag" id="default_flag">
+             <label class="pointer" for="autoquery_flag">自动查询</label>
+             <input type="checkbox" name="autoquery_flag" id="autoquery_flag"> 
+           </div>
+           <div class="item">
+             <button class='pointer' data-config="save" >保存</button>
+           </div>
          </div>
-         <div class="item margin-bottom left">
-           <label class="pointer" for="public_flag">共享</label>
-           <input type="checkbox" name="public_flag" id="public_flag">
-           <label class="pointer" for="default_flag">默认</label>
-           <input type="checkbox" name="default_flag" id="default_flag">
-           <label class="pointer" for="autoquery_flag">自动查询</label>
-           <input type="checkbox" name="autoquery_flag" id="autoquery_flag">
-           <button class='pointer' data-config="save" >保存</button>
-         </div>
-         <div class="item left">
-           <label class="pointer" for="loding_format">选择配置:</label>
-           <select id="loding_format"></select>
-           <button class='pointer' data-config="load">加载</button>
+         <div id="config-2" class='tab'>
+           <div class="item" style="text-indent:6rem;margin:50px auto 60px">
+             <label class="pointer" for="loding_format">选择配置:</label>
+             <select id="loding_format"></select>
+           </div>
+           <div class="item">
+             <button class='pointer' data-config="load">加载</button>
+           </div>
          </div>
        </div>
      </div>
@@ -329,6 +345,25 @@
    </div>
      
     <script>
+        
+         $(function() {
+            //设置拖拽
+    		$("#uf").draggable();
+    		$("#row-def").draggable();
+    		$("#orderby").draggable();
+    		$("#config").draggable();
+    		$("#lov").draggable();
+    		//设置日期选择器
+    		$("#hdate").datepicker({
+      			changeMonth: true,
+     		    changeYear: true
+   		    });
+    		$("#hdate").datepicker("option", "dateFormat","yy-mm-dd");
+    		$("#hdate").datepicker("option", "showAnim", "slide" );
+    		//设置tab分栏
+    		$( "#configtabs" ).tabs();
+  		 });
+        
         jQuery.json={
         	getContent:function(data,JSONtype){  
         	    if(JSONtype=='table'){
